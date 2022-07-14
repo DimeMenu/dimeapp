@@ -1,33 +1,62 @@
 <template>
-  <v-tabs-items class="pa-1" v-model="tab">
-    <v-tab-item v-for="item in 5" :key="item">
-      <v-row>
-        <v-col v-for="i in 5" :key="i" cols="12" md="6" lg="4">
-          <v-card dense @click="() => {}">
-            <v-img
-              height="200"
-              class="white--text align-end shadow--text"
-              gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
-              src=""
+  <v-tab-item>
+    <v-row>
+      <v-col cols="12" md="6" lg="4" v-for="(item, j) in items" :key="j">
+        <v-card @click="addPedido(item)" :color="color + ' lighten-5'">
+          <v-img
+            v-if="item.imagen"
+            width="120"
+            height="100"
+            class="rounded float-left mr-2"
+            :src="item.imagen"
+          ></v-img>
+          <v-card-text>
+            <div class="text-h5">
+              {{ item.nombre }}
+            </div>
+            {{ item.descripcion }}
+          </v-card-text>
+          <v-card-actions>
+            <v-chip small :color="color + ' lighten-3'"
+              >Añadir al pedido</v-chip
             >
-              <v-card-title>
-                <h2>nombre</h2>
-              </v-card-title>
-              <v-card-text>
-                <p>descripcion</p>
-              </v-card-text>
-            </v-img>
-          </v-card>
-        </v-col>
-      </v-row>
-    </v-tab-item>
-  </v-tabs-items>
+            <v-spacer></v-spacer>
+            <v-icon color="indigo" left>mdi-basket-fill</v-icon> ${{
+              item.valor | pesos
+            }}
+          </v-card-actions>
+          <div style="clear: both"></div>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-tab-item>
 </template>
-
 <script>
+import { mapMutations, mapGetters } from "vuex";
 export default {
-  data: () => ({
-    tab: 0,
-  }),
+  props: ["catId"],
+  data: () => ({}),
+  computed: {
+    ...mapGetters(["productos", "color"]),
+    items() {
+      return this.productos.filter((p) => p.categoria == this.catId);
+    },
+  },
+  methods: {
+    ...mapMutations(["addPedido"]),
+  },
+  filters: {
+    pesos(v) {
+      let _val = "";
+      _val = v
+        .toString()
+        .split("")
+        .reverse()
+        .join("")
+        .replace(/(?=\d*\.?)(\d{3})/g, "$1.");
+      _val = _val.split("").reverse().join("").replace(/^[.]/, "");
+      return _val;
+    },
+  },
 };
 </script>

@@ -1,14 +1,14 @@
 <template>
-  <v-footer dark fixed app>
-    <v-bottom-sheet @input="verPedido" :value="pedido">
+  <v-footer :color="color" dark fixed app>
+    <v-bottom-sheet v-model="$store.state.openPedido">
       <v-card dense tile>
-        <v-toolbar dark color="darken-3">
+        <v-toolbar dark :color="color + ' darken-3'">
           <v-toolbar-items>
             <v-icon left>mdi-basket-outline</v-icon>
           </v-toolbar-items>
           <v-toolbar-title>Pedido</v-toolbar-title>
           <v-spacer></v-spacer>
-          <v-btn fab x-small @click="verPedido">
+          <v-btn fab x-small @click="openPedido(true)">
             <v-icon>mdi-close</v-icon></v-btn
           >
         </v-toolbar>
@@ -40,7 +40,7 @@
                       >
                     </v-list-item-content>
                     <v-list-item-icon>
-                      <v-btn @click="restar(index)" fab x-small color="error">
+                      <v-btn @click="deletePedido(index)" fab x-small color="error">
                         <v-icon v-if="item.cant == 1"
                           >mdi-delete-outline</v-icon
                         >
@@ -89,7 +89,7 @@
         <v-card-actions class="darken-3 px-4 py-1 mx-0">
           <v-row>
             <v-col>
-              <v-btn dark class="ma-1" @click="verPedido">
+              <v-btn dark class="ma-1" @click="openPedido(false)">
                 <v-icon left>mdi-basket-outline</v-icon>
                 <transition name="slide-fade" mode="out-in">
                   <span :key="total"> Mi Pedido</span>
@@ -99,7 +99,7 @@
             <v-col>
               <div class="pa-1 rounded text-center">
                 <span class="pr-2 white--text">Total:</span>
-                <v-btn dark @click="verPedido">
+                <v-btn dark @click="openPedido(false)">
                   <transition name="slide-fade" mode="out-in">
                     <span :key="total">$ {{ total | pesos }}</span>
                   </transition>
@@ -110,14 +110,14 @@
         </v-card-actions>
       </v-card>
     </v-bottom-sheet>
-    <v-btn color="success"
-      @click="verPedido"
-    >text</v-btn>
+    <v-btn @click="openPedido(true)">Ver Pedido</v-btn>
+    <v-spacer></v-spacer>
+    <v-btn @click="openPedido(true)">$ 0</v-btn>
   </v-footer>
 </template>
 
 <script>
-import { mapState, mapMutations } from "vuex";
+import { mapGetters, mapMutations } from "vuex";
 
 export default {
   name: "Footer",
@@ -126,7 +126,7 @@ export default {
     mesa: null,
     total: 0,
     mesas: [],
-    pedidos: [],
+
   }),
 
   filters: {
@@ -136,14 +136,14 @@ export default {
   },
 
   computed: {
-    ...mapState(["pedido"]),
+    ...mapGetters(["color", "pedidos"]),
     disable() {
       return false;
     },
   },
 
   methods: {
-    ...mapMutations(["verPedido"]),
+    ...mapMutations(["openPedido"]),
     setMesa() {},
   },
 };

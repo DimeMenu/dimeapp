@@ -3,26 +3,32 @@
     <MenuHome />
     <MenuInfo />
     <AppBar />
-    <v-main>
-      <v-container>
-       <Products/>
-      </v-container>
-    </v-main>
+    <Container />
     <Footer />
   </v-app>
 </template>
 
 <script>
-import Footer from "@/components/Footer.vue";
-import AppBar from "@/components/AppBar.vue";
+import { mapActions, mapGetters } from "vuex";
 import MenuHome from "@/components/MenuHome.vue";
 import MenuInfo from "@/components/MenuInfo.vue";
-import Products from "@/components/Products.vue";
-
-// @ is an alias to /src
+import AppBar from "@/components/AppBar.vue";
+import Container from "../components/Container.vue";
+import Footer from "@/components/Footer.vue";
 
 export default {
   name: "HomeView",
-  components: { Footer, AppBar, MenuHome, MenuInfo, Products },
+  components: { Footer, AppBar, MenuHome, MenuInfo, Container },
+  async created() {
+    await this.getCliente(this.$route.params.url);
+    await this.getCategorias(this.clienteId);
+    this.getProductos(this.categoriasIds);
+  },
+  computed: {
+    ...mapGetters(["clienteId", "categoriasIds"]),
+  },
+  methods: {
+    ...mapActions(["getCliente", "getCategorias", "getProductos"]),
+  },
 };
 </script>
