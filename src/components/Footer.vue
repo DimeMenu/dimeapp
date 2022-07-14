@@ -134,15 +134,12 @@ export default {
       return v;
     },
   },
-
   computed: {
     ...mapGetters(["color", "pedidos"]),
     disable() {
       return false;
     },
   },
-
-
   methods: {
     ...mapMutations(["openPedido"]),
     setMesa() {},
