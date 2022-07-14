@@ -142,6 +142,7 @@ export default {
     },
   },
 
+
   methods: {
     ...mapMutations(["openPedido"]),
     setMesa() {},
