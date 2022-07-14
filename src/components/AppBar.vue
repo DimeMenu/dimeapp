@@ -22,7 +22,6 @@
     </template>
   </v-app-bar>
 </template>
-
 <script>
 import NavTabs from "./NavTabs.vue";
 import { mapMutations, mapGetters } from "vuex";
